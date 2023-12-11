@@ -128,10 +128,10 @@ public class UserInterface extends JFrame implements ActionListener{
         flatFeeLabel.setVisible(false);
         additionalFeeLabel.setVisible(false);
 
-        costAndFeePanel.add(costLabel);
-        costAndFeePanel.add(cost);
         costAndFeePanel.add(weightLabel);
         costAndFeePanel.add(weight);
+        costAndFeePanel.add(costLabel);
+        costAndFeePanel.add(cost);
         costAndFeePanel.add(flatFeeLabel);
         costAndFeePanel.add(flatFee);
         costAndFeePanel.add(additionalFeeLabel);
@@ -178,7 +178,29 @@ public class UserInterface extends JFrame implements ActionListener{
                 break;
             case "Submit":
                 if(validateFields()) {
-                    System.out.println("FORDAGO!!!");
+                    Person sender = new Person(senderName.getText(), senderAddress.getText(), senderCity.getText(), senderState.getText(), senderZIP_code.getText());
+                    Person recipient = new Person(recipientName.getText(), recipientAddress.getText(), recipientCity.getText(), recipientState.getText(), recipientZIP_code.getText());
+
+                    if(standardRadioButton.isSelected()) {
+                         System.out.println("STANDARD PACKAGE");
+                        Package pkg = new Package(sender, recipient, Float.parseFloat(weight.getText()), Float.parseFloat(cost.getText()));
+                        JOptionPane.showMessageDialog(null, String.valueOf(pkg.calculateCost()) + " Delivery cost.");
+                    }
+                    else if(overnightRadioButton.isSelected()) {
+                        System.out.println("OVERNIGHT PACKAGE");
+                        Overnight pkg = new Overnight(sender, recipient, Float.parseFloat(weight.getText()), Float.parseFloat(cost.getText()), Float.parseFloat(additionalFee.getText()));
+                        JOptionPane.showMessageDialog(null, String.valueOf(pkg.calculateCost()) + " Delivery cost.");
+                    }
+                    else if(twoDayRadioButton.isSelected()) {
+                        System.out.println("TWO DAY PACKAGE");
+                        System.out.println("weight: " + weight.getText());
+                        System.out.println("COST PER OUNCE: " + cost.getText());
+                        System.out.println("FLAT FEE: " + flatFee.getText());
+                        TwoDay pkg = new TwoDay(sender, recipient, Float.parseFloat(weight.getText()), Float.parseFloat(cost.getText()), Float.parseFloat(flatFee.getText()));
+                        JOptionPane.showMessageDialog(null, String.valueOf(pkg.calculateCost()) + " Delivery cost.");
+                    }
+
+                    
                 }
                 else {
                     JOptionPane.showMessageDialog(null,"Fill up all the required fields bobo!");
