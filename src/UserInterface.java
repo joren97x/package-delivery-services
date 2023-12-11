@@ -2,10 +2,10 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-
 import java.awt.GridLayout;
 import java.awt.event.*;
 
@@ -32,17 +32,14 @@ public class UserInterface extends JFrame implements ActionListener{
         twoDayRadioButton = new JRadioButton("Two day package");
         overnightRadioButton = new JRadioButton("Overnight package");
         radioButtonGroup = new ButtonGroup();
-
-        submitButton = new JButton("Submit");
-        submitButton.addActionListener(this);
-        submitButton.setBounds(WIDTH-120, HEIGHT-120,80,35);
+        standardRadioButton.addActionListener(this);
+        twoDayRadioButton.addActionListener(this);
+        overnightRadioButton.addActionListener(this);
 
         senderLabel = new JLabel("Sender");
         recipientLabel = new JLabel("Recipient");
         senderBlankLabel = new JLabel("");
         recipientBlankLabel = new JLabel("");
-        // senderLabel.setBounds(20, 20,50,50);
-
         
         radioPanel = new JPanel();
         radioPanel.add(standardRadioButton);
@@ -65,13 +62,11 @@ public class UserInterface extends JFrame implements ActionListener{
         recipientCityLabel = new JLabel("City");
         recipientStateLabel = new JLabel("State");
         
-
         senderRecipientPanel = new JPanel(new GridLayout(1,12,5,5));
         senderPanel = new JPanel(new GridLayout(6,12));
         recipientPanel = new JPanel(new GridLayout(6,12));
 
         senderLabel = new JLabel("Sender");
-
         senderName = new JTextField();
         senderAddress = new JTextField();
         senderCity = new JTextField();
@@ -98,7 +93,6 @@ public class UserInterface extends JFrame implements ActionListener{
         recipientPanel.add(recipientZIP_codeLabel);
         recipientPanel.add(recipientZIP_code);
 
-
         senderPanel.add(senderLabel);
         senderPanel.add(senderBlankLabel);
         senderPanel.add(senderNameLabel);
@@ -111,7 +105,6 @@ public class UserInterface extends JFrame implements ActionListener{
         senderPanel.add(senderState);
         senderPanel.add(senderZIP_codeLabel);
         senderPanel.add(senderZIP_code);
-
 
         radioPanel.setBounds(WIDTH/3, 5, 80, 280);
         radioPanel.setSize(130,90);
@@ -130,6 +123,11 @@ public class UserInterface extends JFrame implements ActionListener{
         flatFee = new JTextField();
         additionalFee = new JTextField();
 
+        flatFee.setVisible(false);
+        additionalFee.setVisible(false);
+        flatFeeLabel.setVisible(false);
+        additionalFeeLabel.setVisible(false);
+
         costAndFeePanel.add(costLabel);
         costAndFeePanel.add(cost);
         costAndFeePanel.add(weightLabel);
@@ -139,7 +137,11 @@ public class UserInterface extends JFrame implements ActionListener{
         costAndFeePanel.add(additionalFeeLabel);
         costAndFeePanel.add(additionalFee);
         
-        costAndFeePanel.setBounds(10, 320, 468, 50);;
+        costAndFeePanel.setBounds(10, 320, 468, 50);
+
+        submitButton = new JButton("Submit");
+        submitButton.addActionListener(this);
+        submitButton.setBounds(WIDTH-120, HEIGHT-120,80,35);
 
         this.add(radioPanel);
         this.add(senderRecipientPanel);
@@ -153,9 +155,62 @@ public class UserInterface extends JFrame implements ActionListener{
 
     public void actionPerformed(ActionEvent e) {
 
-        
+        String command = e.getActionCommand();
 
-        System.out.println(e.getActionCommand());
+        switch (command) {
+            case "Standard package":
+                flatFee.setVisible(false);
+                additionalFee.setVisible(false);
+                flatFeeLabel.setVisible(false);
+                additionalFeeLabel.setVisible(false);
+                break;
+            case "Two day package":
+                flatFee.setVisible(true);
+                additionalFee.setVisible(false);
+                flatFeeLabel.setVisible(true);
+                additionalFeeLabel.setVisible(false);
+                break;
+            case "Overnight package":
+                flatFee.setVisible(false);
+                additionalFee.setVisible(true);
+                flatFeeLabel.setVisible(false);
+                additionalFeeLabel.setVisible(true);
+                break;
+            case "Submit":
+                if(validateFields()) {
+                    System.out.println("FORDAGO!!!");
+                }
+                else {
+                    JOptionPane.showMessageDialog(null,"Fill up all the required fields bobo!");
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    public boolean validateFields() {
+
+            if(overnightRadioButton.isSelected() && additionalFee.getText().isEmpty()) {
+                return false;
+            }
+            else if(twoDayRadioButton.isSelected() && flatFee.getText().isEmpty()) {
+                return false;
+            }
+
+        return 
+            !senderName.getText().isEmpty() &&
+            !senderAddress.getText().isEmpty() &&
+            !senderCity.getText().isEmpty() &&
+            !senderState.getText().isEmpty() &&
+            !senderZIP_code.getText().isEmpty() &&
+            !recipientName.getText().isEmpty() &&
+            !recipientAddress.getText().isEmpty() &&
+            !recipientCity.getText().isEmpty() &&
+            !recipientState.getText().isEmpty() &&
+            !recipientZIP_code.getText().isEmpty() &&
+            !cost.getText().isEmpty() &&
+            !weight.getText().isEmpty();
     }
     
 }
