@@ -32,4 +32,20 @@ public class Package {
         return this.costPerOunce;
     }
 
+    public void setSender(Person sender) {
+        this.sender = sender;
+    }
+
+    public void setRecipient(Person recipient) {
+        this.recipient = recipient;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
+    public void setcostPerOunce(float costPerOunce) {
+        this.costPerOunce = costPerOunce;
+    }
+
 }

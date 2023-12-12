@@ -118,10 +118,10 @@ public class UserInterface extends JFrame implements ActionListener{
         weightLabel = new JLabel("Weight");
         flatFeeLabel = new JLabel("Flat fee");
         additionalFeeLabel = new JLabel("Addional Fee");
-        cost = new JTextField();
-        weight = new JTextField();
-        flatFee = new JTextField();
-        additionalFee = new JTextField();
+        cost = new JTextField("0");
+        weight = new JTextField("0");
+        flatFee = new JTextField("0");
+        additionalFee = new JTextField("0");
 
         flatFee.setVisible(false);
         additionalFee.setVisible(false);
@@ -144,6 +144,7 @@ public class UserInterface extends JFrame implements ActionListener{
         submitButton.setBounds(WIDTH-120, HEIGHT-120,80,35);
 
         this.add(radioPanel);
+        this.setTitle("Joren's delivery services");
         this.add(senderRecipientPanel);
         this.add(costAndFeePanel);
         this.add(submitButton);
@@ -182,28 +183,17 @@ public class UserInterface extends JFrame implements ActionListener{
                     Person recipient = new Person(recipientName.getText(), recipientAddress.getText(), recipientCity.getText(), recipientState.getText(), recipientZIP_code.getText());
 
                     if(standardRadioButton.isSelected()) {
-                         System.out.println("STANDARD PACKAGE");
                         Package pkg = new Package(sender, recipient, Float.parseFloat(weight.getText()), Float.parseFloat(cost.getText()));
                         JOptionPane.showMessageDialog(null, String.valueOf(pkg.calculateCost()) + " Delivery cost.");
                     }
                     else if(overnightRadioButton.isSelected()) {
-                        System.out.println("OVERNIGHT PACKAGE");
                         Overnight pkg = new Overnight(sender, recipient, Float.parseFloat(weight.getText()), Float.parseFloat(cost.getText()), Float.parseFloat(additionalFee.getText()));
                         JOptionPane.showMessageDialog(null, String.valueOf(pkg.calculateCost()) + " Delivery cost.");
                     }
                     else if(twoDayRadioButton.isSelected()) {
-                        System.out.println("TWO DAY PACKAGE");
-                        System.out.println("weight: " + weight.getText());
-                        System.out.println("COST PER OUNCE: " + cost.getText());
-                        System.out.println("FLAT FEE: " + flatFee.getText());
                         TwoDay pkg = new TwoDay(sender, recipient, Float.parseFloat(weight.getText()), Float.parseFloat(cost.getText()), Float.parseFloat(flatFee.getText()));
                         JOptionPane.showMessageDialog(null, String.valueOf(pkg.calculateCost()) + " Delivery cost.");
                     }
-
-                    
-                }
-                else {
-                    JOptionPane.showMessageDialog(null,"Fill up all the required fields bobo!");
                 }
                 break;
             default:
@@ -212,27 +202,45 @@ public class UserInterface extends JFrame implements ActionListener{
     }
 
     public boolean validateFields() {
+        System.out.println(senderName.getText().isEmpty());
+        if( senderName.getText().isEmpty() ||
+            senderAddress.getText().isEmpty() ||
+            senderCity.getText().isEmpty() ||
+            senderState.getText().isEmpty() ||
+            senderZIP_code.getText().isEmpty() ||
+            recipientName.getText().isEmpty() ||
+            recipientAddress.getText().isEmpty() ||
+            recipientCity.getText().isEmpty() ||
+            recipientState.getText().isEmpty() ||
+            recipientZIP_code.getText().isEmpty() ||
+            cost.getText().isEmpty() ||
+            weight.getText().isEmpty()
+        ) {
+            JOptionPane.showMessageDialog(null,"Fill up the blank fields.");
+            return false;
+        }
 
-            if(overnightRadioButton.isSelected() && additionalFee.getText().isEmpty()) {
-                return false;
-            }
-            else if(twoDayRadioButton.isSelected() && flatFee.getText().isEmpty()) {
-                return false;
-            }
+        if(Float.parseFloat(cost.getText()) <= 0 || Float.parseFloat(weight.getText()) <= 0 ) {
+            JOptionPane.showMessageDialog(null,"The weight and cost per ounce must be positive numbers greater than 0.");
+            return false;
+        }
 
-        return 
-            !senderName.getText().isEmpty() &&
-            !senderAddress.getText().isEmpty() &&
-            !senderCity.getText().isEmpty() &&
-            !senderState.getText().isEmpty() &&
-            !senderZIP_code.getText().isEmpty() &&
-            !recipientName.getText().isEmpty() &&
-            !recipientAddress.getText().isEmpty() &&
-            !recipientCity.getText().isEmpty() &&
-            !recipientState.getText().isEmpty() &&
-            !recipientZIP_code.getText().isEmpty() &&
-            !cost.getText().isEmpty() &&
-            !weight.getText().isEmpty();
+        if(overnightRadioButton.isSelected() && (additionalFee.getText().isEmpty() || Float.parseFloat(additionalFee.getText()) <= 0)) {
+            JOptionPane.showMessageDialog(null,"Fill upi ang additional fee oi tanga");
+            return false;
+        }
+        else if(twoDayRadioButton.isSelected() && (flatFee.getText().isEmpty() || Float.parseFloat(flatFee.getText()) <= 0)) {
+            JOptionPane.showMessageDialog(null,"Fill upi pod ang flat fee oi amaw");
+            return false;
+        }
+
+        if(!overnightRadioButton.isSelected() && !twoDayRadioButton.isSelected() && !standardRadioButton.isSelected()) {
+            JOptionPane.showMessageDialog(null, "Choose a package dumbass");
+            return false;
+        }
+
+        return true;
+
     }
     
 }
