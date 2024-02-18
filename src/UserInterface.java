@@ -226,16 +226,16 @@ public class UserInterface extends JFrame implements ActionListener{
         }
 
         if(overnightRadioButton.isSelected() && (additionalFee.getText().isEmpty() || Float.parseFloat(additionalFee.getText()) <= 0)) {
-            JOptionPane.showMessageDialog(null,"Fill upi ang additional fee oi tanga");
+            JOptionPane.showMessageDialog(null,"Fill upi ang additional fee");
             return false;
         }
         else if(twoDayRadioButton.isSelected() && (flatFee.getText().isEmpty() || Float.parseFloat(flatFee.getText()) <= 0)) {
-            JOptionPane.showMessageDialog(null,"Fill upi pod ang flat fee oi amaw");
+            JOptionPane.showMessageDialog(null,"Fill upi pod ang flat fee");
             return false;
         }
 
         if(!overnightRadioButton.isSelected() && !twoDayRadioButton.isSelected() && !standardRadioButton.isSelected()) {
-            JOptionPane.showMessageDialog(null, "Choose a package dumbass");
+            JOptionPane.showMessageDialog(null, "Choose a package");
             return false;
         }
 
